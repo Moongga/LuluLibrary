@@ -13,8 +13,6 @@ void menu(RenderWindow& window)
     QuitT.loadFromFile("images/main_menu/Quit_uncursored.png");
     BackgroundT.loadFromFile("images/main_menu/menu_whithout_buttons.png");
     sf::Sprite Start(StartT), Quit(QuitT), Bg(BackgroundT);
-    //bool isMenu = 1;
-    //int menuNum = 0;
     Bg.setPosition(0, 0);
 
     StartT.loadFromFile("images/main_menu/Start_uncursored.png");
@@ -22,7 +20,6 @@ void menu(RenderWindow& window)
 
     Start.setPosition(390, 420);
     Quit.setPosition(390, 520);
-    //menuNum = 0;
     while (window.isOpen())
     {
         // создание ивента для работы с 
@@ -64,17 +61,6 @@ void menu(RenderWindow& window)
 				QuitT.loadFromFile("images/main_menu/Quit_cursored.png");
 			}
         }
-
-        //if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
-        //{
-        //    StartT.loadFromFile("images/main_menu/Start_cursored.png");
-        //    menuNum = 1;
-        //}
-        //if (IntRect(390, 520, 240, 60).contains(Mouse::getPosition(window)))
-        //{
-        //    QuitT.loadFromFile("images/main_menu/Quit_cursored.png");
-        //    menuNum = 2;
-        //}
 
         window.clear();
         window.draw(Bg);

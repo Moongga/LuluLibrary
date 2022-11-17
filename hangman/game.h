@@ -20,13 +20,12 @@ void game(RenderWindow& window)
 
     while (window.isOpen())
     {
-        // создание ивента для работы с 
+        // Создание ивента для работы с кнопками
         sf::Event event;
 
         while (window.pollEvent(event))
         {
-
-            // Нажатие кнопок. При "Начать играть" переходит на игру, а на "Выход" - выходим
+            // Нажатие кнопок.
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 //буква а
