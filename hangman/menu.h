@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
@@ -25,20 +25,20 @@ void menu(RenderWindow& window)
     //menuNum = 0;
     while (window.isOpen())
     {
-        // создание ивента для работы с 
+        // СЃРѕР·РґР°РЅРёРµ РёРІРµРЅС‚Р° РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ 
         sf::Event event;
 
         while (window.pollEvent(event))
         {
-            // Подгружаем изображения кнопок
+            // РџРѕРґРіСЂСѓР¶Р°РµРј РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РєРЅРѕРїРѕРє
             StartT.loadFromFile("images/main_menu/Start_uncursored.png");
             QuitT.loadFromFile("images/main_menu/Quit_uncursored.png");
 
-            // Помещаем их на нужные координаты
+            // РџРѕРјРµС‰Р°РµРј РёС… РЅР° РЅСѓР¶РЅС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹
             Start.setPosition(390, 420);
             Quit.setPosition(390, 520);
 
-            // Нажатие кнопок. При "Начать играть" переходит на игру, а на "Выход" - выходим
+            // РќР°Р¶Р°С‚РёРµ РєРЅРѕРїРѕРє. РџСЂРё "РќР°С‡Р°С‚СЊ РёРіСЂР°С‚СЊ" РїРµСЂРµС…РѕРґРёС‚ РЅР° РёРіСЂСѓ, Р° РЅР° "Р’С‹С…РѕРґ" - РІС‹С…РѕРґРёРј
             if (Mouse::isButtonPressed(Mouse::Left))
             {
                 if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
@@ -54,7 +54,7 @@ void menu(RenderWindow& window)
                 }
             }
 
-            // Проверка на то, попадает ли курсор мышки в область кнопок для того, чтобы сделать эффект наведения
+            // РџСЂРѕРІРµСЂРєР° РЅР° С‚Рѕ, РїРѕРїР°РґР°РµС‚ Р»Рё РєСѓСЂСЃРѕСЂ РјС‹С€РєРё РІ РѕР±Р»Р°СЃС‚СЊ РєРЅРѕРїРѕРє РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ СЃРґРµР»Р°С‚СЊ СЌС„С„РµРєС‚ РЅР°РІРµРґРµРЅРёСЏ
 			if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
 			{
 				StartT.loadFromFile("images/main_menu/Start_cursored.png");
