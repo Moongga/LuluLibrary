@@ -13,9 +13,15 @@ using namespace sf;
 /// <returns>0</returns>
 bool StartGame()
 {
-
     RenderWindow window(VideoMode(1024, 768), "Lulu");
     game(window);
+    return 0;
+}
+
+bool Menu()
+{
+    RenderWindow window(VideoMode(1024, 768), "Lulu Library");
+    menu(window);
     return 0;
 }
 
@@ -25,5 +31,5 @@ bool StartGame()
 /// <returns></returns>
 int main()
 {
-    StartGame();
+    Menu();
 }
