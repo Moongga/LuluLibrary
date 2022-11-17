@@ -16,8 +16,31 @@ void game(RenderWindow& window)
     tx_game_scene.loadFromFile("images/game_scene.png");
     Sprite Backgr(tx_game_scene);
     Backgr.setPosition(0, 0);
-    window.draw(Backgr);
-    window.display();
+
+
+    while (window.isOpen())
+    {
+        // создание ивента для работы с 
+        sf::Event event;
+
+        while (window.pollEvent(event))
+        {
+
+            // Нажатие кнопок. При "Начать играть" переходит на игру, а на "Выход" - выходим
+            if (Mouse::isButtonPressed(Mouse::Left))
+            {
+                //буква а
+                if (IntRect(668, 277, 30, 30).contains(Mouse::getPosition(window)))
+                {
+                    window.close();
+                }
+            }
+        }
+
+        window.clear();
+        window.draw(Backgr);
+        window.display();
+    }
 
     /// <summary>
     /// textures for keyboard and background. each russian letter texture named like its transcription in english. Each texture will include its letter image
