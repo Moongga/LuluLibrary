@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
@@ -20,16 +20,16 @@ void game(RenderWindow& window)
 
     while (window.isOpen())
     {
-        // создание ивента для работы с 
+        // СЃРѕР·РґР°РЅРёРµ РёРІРµРЅС‚Р° РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ 
         sf::Event event;
 
         while (window.pollEvent(event))
         {
 
-            // Нажатие кнопок. При "Начать играть" переходит на игру, а на "Выход" - выходим
+            // РќР°Р¶Р°С‚РёРµ РєРЅРѕРїРѕРє. РџСЂРё "РќР°С‡Р°С‚СЊ РёРіСЂР°С‚СЊ" РїРµСЂРµС…РѕРґРёС‚ РЅР° РёРіСЂСѓ, Р° РЅР° "Р’С‹С…РѕРґ" - РІС‹С…РѕРґРёРј
             if (Mouse::isButtonPressed(Mouse::Left))
             {
-                //буква а
+                //Р±СѓРєРІР° Р°
                 if (IntRect(668, 277, 30, 30).contains(Mouse::getPosition(window)))
                 {
                     window.close();
