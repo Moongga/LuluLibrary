@@ -8,13 +8,13 @@ using namespace sf;
 
 void menu(RenderWindow& window)
 {
-    Texture StartT, QuitT, BackgroundT;
+    sf::Texture StartT, QuitT, BackgroundT;
     StartT.loadFromFile("images/main_menu/Start_uncursored.png");
     QuitT.loadFromFile("images/main_menu/Quit_uncursored.png");
     BackgroundT.loadFromFile("images/main_menu/menu_whithout_buttons.png");
-    Sprite Start(StartT), Quit(QuitT), Bg(BackgroundT);
-    bool isMenu = 1;
-    int menuNum = 0;
+    sf::Sprite Start(StartT), Quit(QuitT), Bg(BackgroundT);
+    //bool isMenu = 1;
+    //int menuNum = 0;
     Bg.setPosition(0, 0);
 
     StartT.loadFromFile("images/main_menu/Start_uncursored.png");
@@ -22,7 +22,7 @@ void menu(RenderWindow& window)
 
     Start.setPosition(390, 420);
     Quit.setPosition(390, 520);
-    menuNum = 0;
+    //menuNum = 0;
     while (window.isOpen())
     {
         // создание ивента для работы с 
@@ -43,13 +43,14 @@ void menu(RenderWindow& window)
             {
                 if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
                 {
+                    
                     game(window);
                     while (!Keyboard::isKeyPressed(Keyboard::Escape));
                 }
                 if (IntRect(390, 520, 240, 60).contains(Mouse::getPosition(window)))
                 {
                     window.close();
-                    isMenu = false;
+                    //isMenu = false;
                 }
             }
 
@@ -75,11 +76,10 @@ void menu(RenderWindow& window)
         //    menuNum = 2;
         //}
 
-
+        window.clear();
         window.draw(Bg);
         window.draw(Start);
         window.draw(Quit);
         window.display();
-
     }
 }
