@@ -15,12 +15,12 @@ using namespace std;
 void game(RenderWindow& window)
 {
 	// Текстуры букв
-	const int letters_count = 33;
+	const int letters_count = 26;
 	Texture ts[letters_count];
 
 	for (int i = 0; i < letters_count; i++)
 	{
-		string path = "images/keyboard/uncursored_numbers/" + to_string(i) + ".png";
+		string path = "images/keyboard/english/uncursored/" + to_string(i) + ".png";
 		ts[i].loadFromFile(path); // по очереди это будут все 33 буквы
 	}
 
@@ -32,47 +32,39 @@ void game(RenderWindow& window)
 	int y = 277;
 	int y_distanc_cf = 57;
 	COORD positions[letters_count] = {
-		{668, y}, // 0 а
-		{723, y}, // 1 б
-		{778, y}, // 2 в 
-		{833, y}, // 3 г
-		{888, y}, // 4 д
-		{943, y}, // 5 е
+		{668, y}, // 0 a
+		{723, y}, // 1 b
+		{778, y}, // 2 c 
+		{833, y}, // 3 d
+		{888, y}, // 4 e
+		{943, y}, // 5 f
 
-		{668, y += y_distanc_cf}, // 6 ё
-		{723, y}, // 7 ж
-		{778, y}, // 8 з
-		{833, y}, // 9 и
-		{888, y}, // 10 й
-		{943, y}, // 11 к
+		{668, y += y_distanc_cf}, // 6 g
+		{723, y}, // 7 h
+		{778, y}, // 8 i
+		{833, y}, // 9 j
+		{888, y}, // 10 k
+		{943, y}, // 11 l
 
-		{668, y += y_distanc_cf}, // 12 л
-		{723, y}, // 13 м
-		{778, y}, // 14 н
-		{833, y}, // 15 о
-		{888, y}, // 16 п
-		{943, y}, // 17 р
+		{668, y += y_distanc_cf}, // 12 m
+		{723, y}, // 13 n
+		{778, y}, // 14 o
+		{833, y}, // 15 p
+		{888, y}, // 16 q
+		{943, y}, // 17 r
 
-		{668, y += y_distanc_cf}, // 18 с
-		{723, y}, // 19 т
-		{778, y}, // 20 у
-		{833, y}, // 21 ф
-		{888, y}, // 22 х
-		{943, y}, // 23 ц
+		{668, y += y_distanc_cf}, // 18 s
+		{723, y}, // 19 t
+		{778, y}, // 20 u
+		{833, y}, // 21 v
+		{888, y}, // 22 w
+		{943, y}, // 23 x
 
-		{668, y += y_distanc_cf}, // 24 ч
-		{723, y}, // 25 ш
-		{778, y}, // 26 щ
-		{833, y}, // 27 ъ
-		{888, y}, // 28 ы
-		{943, y}, // 29 ь
-
-		{753, y += 50}, // 30 э
-		{808, y}, // 31 ю
-		{863, y}, // 32 я
+		{778, y += y_distanc_cf}, // 24 y
+		{833, y}, // 25 z
 	};
 
-	for (int i = 0; i < 33; i++)
+	for (int i = 0; i < letters_count; i++)
 	{
 		sprites[i].setTexture(ts[i]);
 		sprites[i].setPosition(positions[i].X, positions[i].Y);
@@ -80,9 +72,20 @@ void game(RenderWindow& window)
 
 	// Текстура фона игры
 	Texture tx_game_scene;
-	tx_game_scene.loadFromFile("images/game-scene_without-buttons.png");
+	tx_game_scene.loadFromFile("images/english_game-scene.png");
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
+
+	// шрифт
+	sf::Font font;
+	if (!font.loadFromFile("font/DEJAVUSERIFCONDENSED.ttf"))
+	{
+		cout << "Error loading file";
+	}
+	sf::Text text;
+	//Text.SetColor(sf::Color(78, 66, 33));
+	text.setFont(font);
+	text.setString("Привет!");
 
 	int cursor_enter = 0;
 
@@ -110,10 +113,11 @@ void game(RenderWindow& window)
 		window.clear();
 		window.draw(Backgr);
 		// Цикл для отображение картинок букв
-		for (int i = 0; i < 33; i++)
+		for (int i = 0; i < letters_count; i++)
 		{
 			window.draw(sprites[i]);
 		}
+		window.draw(text);
 		window.display();
 	}
 }
