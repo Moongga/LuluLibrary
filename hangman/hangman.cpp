@@ -31,5 +31,6 @@ bool Menu()
 /// <returns></returns>
 int main()
 {
+    //StartGame();
     Menu();
 }

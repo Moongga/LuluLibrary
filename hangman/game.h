@@ -3,7 +3,9 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <windows.h>
+#include <string>
 using namespace sf;
+using namespace std;
 
 /// <summary>
 /// method that makes necessary textures for second screen(game scene)
@@ -12,167 +14,106 @@ using namespace sf;
 /// <param name="window"></param>
 void game(RenderWindow& window)
 {
-    Texture tx_game_scene;
-    tx_game_scene.loadFromFile("images/game_scene.png");
-    Sprite Backgr(tx_game_scene);
-    Backgr.setPosition(0, 0);
+	// Текстуры букв
+	const int letters_count = 33;
+	Texture ts[letters_count];
 
+	for (int i = 0; i < letters_count; i++)
+	{
+		string path = "images/keyboard/uncursored_numbers/" + to_string(i) + ".png";
+		ts[i].loadFromFile(path); // по очереди это будут все 33 буквы
+	}
 
-    while (window.isOpen())
-    {
-        // Создание ивента для работы с кнопками
-        sf::Event event;
+	// устанавливаем текстуры на спрайты
+	// каждому спрайту необходимо задать текстуру
+	sf::Sprite sprites[letters_count];
 
-        while (window.pollEvent(event))
-        {
-            // Нажатие кнопок.
-            if (Mouse::isButtonPressed(Mouse::Left))
-            {
-                //буква а
-                if (IntRect(668, 277, 30, 30).contains(Mouse::getPosition(window)))
-                {
-                    window.close();
-                }
-            }
-        }
+	// Координаты картинок с буквами
+	int y = 277;
+	int y_distanc_cf = 57;
+	COORD positions[letters_count] = {
+		{668, y}, // 0 а
+		{723, y}, // 1 б
+		{778, y}, // 2 в 
+		{833, y}, // 3 г
+		{888, y}, // 4 д
+		{943, y}, // 5 е
 
-        window.clear();
-        window.draw(Backgr);
-        window.display();
-    }
+		{668, y += y_distanc_cf}, // 6 ё
+		{723, y}, // 7 ж
+		{778, y}, // 8 з
+		{833, y}, // 9 и
+		{888, y}, // 10 й
+		{943, y}, // 11 к
 
-    /// <summary>
-    /// textures for keyboard and background. each russian letter texture named like its transcription in english. Each texture will include its letter image
-    /// </summary>
-    /// <param name="window"></param>
-    //Texture Bg_tx;
-    //Texture A_tx, B_tx, V_tx, G_tx,
-    //    D_tx, YE_tx, YO_tx, ZH_tx, Z_tx,
-    //    I_tx, Y_tx, K_tx, L_tx, M_tx, N_tx,
-    //    O_tx, P_tx, R_tx, S_tx, T_tx,
-    //    U_tx, F_tx, H_tx, C_tx, CH_tx,
-    //    SH_tx, SHsoft_tx, EU_tx, SOFT_tx,
-    //    STRONG_tx, E_tx, YU_tx, YA_tx;
+		{668, y += y_distanc_cf}, // 12 л
+		{723, y}, // 13 м
+		{778, y}, // 14 н
+		{833, y}, // 15 о
+		{888, y}, // 16 п
+		{943, y}, // 17 р
 
-    ///// <summary>
-    ///// Here we are loading uncursored letter images to the btn textures first time
-    ///// </summary>
-    ///// <param name="window"></param>
-    //Bg_tx.loadFromFile("images/game_scene.png");
-    //A_tx.loadFromFile("images/keyboard/uncursored/a.png");
-    //B_tx.loadFromFile("images/keyboard/uncursored/b.png");
-    //V_tx.loadFromFile("images/keyboard/uncursored/v.png");
-    //G_tx.loadFromFile("images/keyboard/uncursored/g.png");
-    //D_tx.loadFromFile("images/keyboard/uncursored/d.png");
-    //YE_tx.loadFromFile("images/keyboard/uncursored/ye.png");
-    //YO_tx.loadFromFile("images/keyboard/uncursored/yo.png");
-    //ZH_tx.loadFromFile("images/keyboard/uncursored/zh.png");
-    //Z_tx.loadFromFile("images/keyboard/uncursored/z.png");
-    //I_tx.loadFromFile("images/keyboard/uncursored/i.png");
-    //Y_tx.loadFromFile("images/keyboard/uncursored/y.png");
-    //K_tx.loadFromFile("images/keyboard/uncursored/k.png");
-    //L_tx.loadFromFile("images/keyboard/uncursored/l.png");
-    //M_tx.loadFromFile("images/keyboard/uncursored/m.png");
-    //N_tx.loadFromFile("images/keyboard/uncursored/n.png");
-    //O_tx.loadFromFile("images/keyboard/uncursored/o.png");
-    //P_tx.loadFromFile("images/keyboard/uncursored/p.png");
-    //R_tx.loadFromFile("images/keyboard/uncursored/r.png");
-    //S_tx.loadFromFile("images/keyboard/uncursored/s.png");
-    //T_tx.loadFromFile("images/keyboard/uncursored/t.png");
-    //U_tx.loadFromFile("images/keyboard/uncursored/u.png");
-    //F_tx.loadFromFile("images/keyboard/uncursored/f.png");
-    //H_tx.loadFromFile("images/keyboard/uncursored/h.png");
-    //C_tx.loadFromFile("images/keyboard/uncursored/c.png");
-    //CH_tx.loadFromFile("images/keyboard/uncursored/ch.png");
-    //SH_tx.loadFromFile("images/keyboard/uncursored/sh.png");
-    //SHsoft_tx.loadFromFile("images/keyboard/uncursored/sh_soft.png");
-    //EU_tx.loadFromFile("images/keyboard/uncursored/eu.png");
-    //SOFT_tx.loadFromFile("images/keyboard/uncursored/soft.png");
-    //STRONG_tx.loadFromFile("images/keyboard/uncursored/strong.png");
-    //E_tx.loadFromFile("images/keyboard/uncursored/e.png");
-    //YU_tx.loadFromFile("images/keyboard/uncursored/yu.png");
-    //YA_tx.loadFromFile("images/keyboard/uncursored/ya.png");
+		{668, y += y_distanc_cf}, // 18 с
+		{723, y}, // 19 т
+		{778, y}, // 20 у
+		{833, y}, // 21 ф
+		{888, y}, // 22 х
+		{943, y}, // 23 ц
 
-    ///// <summary>
-    ///// Here we make sprite on each texture in the method
-    ///// </summary>
-    ///// <param name="window"></param>
-    //Sprite A(A_tx), B(B_tx), V(V_tx), G(G_tx), D(D_tx), YE(YE_tx), YO(YO_tx), ZH(ZH_tx), Z(Z_tx),
-    //    I(I_tx), Y(Y_tx), K(K_tx), L(L_tx), M(M_tx), N(N_tx), O(O_tx), P(P_tx), R(R_tx), S(S_tx),
-    //    T(T_tx), U(U_tx), F(F_tx), H(H_tx), C(C_tx), CH(CH_tx), SH(SH_tx), SHsoft(SHsoft_tx), EU(EU_tx),
-    //    SOFT(SOFT_tx), STRONG(STRONG_tx), E(E_tx), YU(YU_tx), YA(YA_tx);
-    //Sprite Bg(Bg_tx);
+		{668, y += y_distanc_cf}, // 24 ч
+		{723, y}, // 25 ш
+		{778, y}, // 26 щ
+		{833, y}, // 27 ъ
+		{888, y}, // 28 ы
+		{943, y}, // 29 ь
 
-    //bool isMenu = 1;
-    //int menuNum = 0;
-    //Bg.setPosition(0, 0);
-    ////while (isMenu)
-    ////{
-    //    /// <summary>
-    //    /// Here we are loading uncursored letter images to the btn textures second time, so every time mouse leaves button, it becomes uncursored again
-    //    /// </summary>
-    //    //Bg_tx.loadFromFile("images/game_scene.png");
-    //    //A_tx.loadFromFile("images/keyboard/uncursored/a.png");
-    //    //B_tx.loadFromFile("images/keyboard/uncursored/b.png");
-    //    //V_tx.loadFromFile("images/keyboard/uncursored/v.png");
-    //    //G_tx.loadFromFile("images/keyboard/uncursored/g.png");
-    //    //D_tx.loadFromFile("images/keyboard/uncursored/d.png");
-    //    //YE_tx.loadFromFile("images/keyboard/uncursored/ye.png");
-    //    //YO_tx.loadFromFile("images/keyboard/uncursored/yo.png");
-    //    //ZH_tx.loadFromFile("images/keyboard/uncursored/zh.png");
-    //    //Z_tx.loadFromFile("images/keyboard/uncursored/z.png");
-    //    //I_tx.loadFromFile("images/keyboard/uncursored/i.png");
-    //    //Y_tx.loadFromFile("images/keyboard/uncursored/k.png");
-    //    //K_tx.loadFromFile("images/keyboard/uncursored/l.png");
-    //    //L_tx.loadFromFile("images/keyboard/uncursored/m.png");
-    //    //M_tx.loadFromFile("images/keyboard/uncursored/n.png");
-    //    //N_tx.loadFromFile("images/keyboard/uncursored/o.png");
-    //    //O_tx.loadFromFile("images/keyboard/uncursored/p.png");
-    //    //P_tx.loadFromFile("images/keyboard/uncursored/r.png");
-    //    //R_tx.loadFromFile("images/keyboard/uncursored/s.png");
-    //    //S_tx.loadFromFile("images/keyboard/uncursored/t.png");
-    //    //T_tx.loadFromFile("images/keyboard/uncursored/u.png");
-    //    //U_tx.loadFromFile("images/keyboard/uncursored/f.png");
-    //    //F_tx.loadFromFile("images/keyboard/uncursored/h.png");
-    //    //H_tx.loadFromFile("images/keyboard/uncursored/h.png");
-    //    //C_tx.loadFromFile("images/keyboard/uncursored/c.png");
-    //    //CH_tx.loadFromFile("images/keyboard/uncursored/ch.png");
-    //    //SH_tx.loadFromFile("images/keyboard/uncursored/sh.png");
-    //    //SHsoft_tx.loadFromFile("images/keyboard/uncursored/sh_soft.png");
-    //    //EU_tx.loadFromFile("images/keyboard/uncursored/eu.png");
-    //    //SOFT_tx.loadFromFile("images/keyboard/uncursored/soft.png");
-    //    //STRONG_tx.loadFromFile("images/keyboard/uncursored/strong.png");
-    //    //E_tx.loadFromFile("images/keyboard/uncursored/e.png");
-    //    //YU_tx.loadFromFile("images/keyboard/uncursored/yu.png");
-    //    //YA_tx.loadFromFile("images/keyboard/uncursored/ya.png");
+		{753, y += 50}, // 30 э
+		{808, y}, // 31 ю
+		{863, y}, // 32 я
+	};
 
-    //    /// <summary>
-    //    /// Here we set position for each letter sprite
-    //    /// </summary>
-    //    A.setPosition(668, 277); B.setPosition(720, 277); V.setPosition(777, 277); G.setPosition(826, 277); D.setPosition(875, 277);
-    //    /*E.setPosition(); YO.setPosition(); ZH.setPosition(); Z.setPosition(); I.setPosition();
-    //    Y.setPosition(); K.setPosition(); L.setPosition(); M.setPosition(); N.setPosition();
-    //    O.setPosition(); P.setPosition(); R.setPosition(); S.setPosition(); T.setPosition();
-    //    U.setPosition(); F.setPosition(); H.setPosition(); C.setPosition(); CH.setPosition();
-    //    SH.setPosition(); SHsoft.setPosition(); EU.setPosition(); SOFT.setPosition(); STRONG.setPosition();
-    //    E.setPosition(); YU.setPosition(); YA.setPosition();*/
+	for (int i = 0; i < 33; i++)
+	{
+		sprites[i].setTexture(ts[i]);
+		sprites[i].setPosition(positions[i].X, positions[i].Y);
+	}
 
-    //    /// <summary>
-    //    /// here we display all textures
-    //    /// </summary>
-    //    window.draw(Bg);
-    //    window.draw(A);
-    //    window.draw(B);
-    //    window.draw(V);
-    //    window.draw(G);
-    //    window.draw(D);
-    //    window.draw(E);
+	// Текстура фона игры
+	Texture tx_game_scene;
+	tx_game_scene.loadFromFile("images/game-scene_without-buttons.png");
+	Sprite Backgr(tx_game_scene);
+	Backgr.setPosition(0, 0);
 
-    //    window.display();
-    //}
-    //if (IntRect(668, 277, 1000, 1000).contains(Mouse::getPosition(window)))
-    //{
-    //    A_tx.loadFromFile("images/keyboard/uncursored/i.png");
-    //    menuNum = 1;
-    //}
+	int cursor_enter = 0;
+
+	while (window.isOpen())
+	{
+		// Создание ивента для работы с кнопками
+		sf::Event event;
+
+		while (window.pollEvent(event))
+		{
+			// Нажатие кнопок
+			if (Mouse::isButtonPressed(Mouse::Left))
+			{
+				// Проверка реагирования нажатия на 33 буквы
+				for (int i = 0; i < 33; i++)
+				{
+					if (IntRect(positions[i].X, positions[i].Y, 30, 30).contains(Mouse::getPosition(window)))
+					{
+						window.close();
+					}
+				}
+			}
+		}
+
+		window.clear();
+		window.draw(Backgr);
+		// Цикл для отображение картинок букв
+		for (int i = 0; i < 33; i++)
+		{
+			window.draw(sprites[i]);
+		}
+		window.display();
+	}
 }
