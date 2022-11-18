@@ -132,6 +132,7 @@
     <ClCompile Include="hangman.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="files.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="menu.h" />
   </ItemGroup>

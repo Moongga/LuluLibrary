@@ -1,8 +1,10 @@
 ﻿#pragma once
+#pragma warning(disable  : 4996)
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <windows.h>
+#include "files.h"
 #include <string>
 using namespace sf;
 using namespace std;
@@ -72,20 +74,20 @@ void game(RenderWindow& window)
 
 	// Текстура фона игры
 	Texture tx_game_scene;
-	tx_game_scene.loadFromFile("images/english_game-scene.png");
+	tx_game_scene.loadFromFile("images/clear_game-scene.png");
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
 	// шрифт
 	sf::Font font;
-	if (!font.loadFromFile("font/DEJAVUSERIFCONDENSED.ttf"))
-	{
-		cout << "Error loading file";
-	}
+	font.loadFromFile("font/dejavu.ttf");
+
 	sf::Text text;
-	//Text.SetColor(sf::Color(78, 66, 33));
+	text.setPosition(758, 200);
 	text.setFont(font);
-	text.setString("Привет!");
+	text.setCharacterSize(40);
+	text.setFillColor(sf::Color(78, 60, 33)); 
+	text.setString(GetWord());
 
 	int cursor_enter = 0;
 
