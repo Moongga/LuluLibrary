@@ -1,5 +1,4 @@
 ﻿#pragma once
-#pragma warning(disable  : 4996)
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
@@ -78,7 +77,7 @@ void game(RenderWindow& window)
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
-	// шрифт
+	// шрифт, вывод рандомного слова
 	sf::Font font;
 	font.loadFromFile("font/dejavu.ttf");
 
