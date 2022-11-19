@@ -3,7 +3,6 @@ spell
 wizard
 witchcraft
 witch
-enchantment
 focus
 sorcerer
 mystic
@@ -11,3 +10,13 @@ illusion
 hag
 mage
 miracle
+silence
+reading
+sand
+biology
+sky
+space
+rain
+summer
+spring
+autumn

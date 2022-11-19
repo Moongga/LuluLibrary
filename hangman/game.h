@@ -19,10 +19,13 @@ void game(RenderWindow& window)
 	const int letters_count = 26;
 	Texture ts[letters_count];
 
+	// Массив с английским алфавитом
+	string eng_alphabet = "abcdefghijklmnopqrstuvwxyz";
+
 	for (int i = 0; i < letters_count; i++)
 	{
 		string path = "images/keyboard/english/uncursored/" + to_string(i) + ".png";
-		ts[i].loadFromFile(path); // по очереди это будут все 33 буквы
+		ts[i].loadFromFile(path); // по очереди это будут все 26 буквы
 	}
 
 	// устанавливаем текстуры на спрайты
@@ -77,25 +80,36 @@ void game(RenderWindow& window)
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
+	/// Работа с загаданным словом
+	string random_word = GetWord();
+	// переменная для вывода скрытого слова с нижнем подчёркиванием
+	string hidden_word;
+	int words_amount = random_word.length();
+	cout << words_amount << "\n" << random_word << endl;
+
+	for (int i = 0; i < words_amount; i++)
+	{
+		hidden_word += "_ ";
+	}
+	hidden_word.pop_back();
+
 	// шрифт, вывод рандомного слова
 	sf::Font font;
 	font.loadFromFile("font/dejavu.ttf");
 
 	sf::Text text;
-	//sf::FloatRect textRect = text.getLocalBounds();
-	//text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	string random_word = GetWord();
-	int words_amount = random_word.length();
-
-	int x_pos_answ = (668 + (words_amount * 40));
-	text.setPosition(x_pos_answ, 200);
 	text.setFont(font);
 	text.setCharacterSize(40);
-	text.setFillColor(sf::Color(78, 60, 33)); 
-	text.setString(random_word);
+	text.setFillColor(sf::Color(78, 60, 33));
+	text.setString(hidden_word);
+	const int centerPos = 820;
+	text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200); // getGlobalBounds().width - измеряет ширину текста
 
-	int cursor_enter = 0;
+	int index_clicked_letter;
 
+	bool pressed_mouse = false;
+	//bool pressed_mouse[letters_count];
+	//fill_n(pressed_mouse, letters_count, false);
 	while (window.isOpen())
 	{
 		// Создание ивента для работы с кнопками
@@ -106,14 +120,28 @@ void game(RenderWindow& window)
 			// Нажатие кнопок
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				// Проверка реагирования нажатия на 33 буквы
-				for (int i = 0; i < 33; i++)
+				// Проверка реагирования нажатия на 26 букв
+				for (int i = 0; i < letters_count; i++)
 				{
 					if (IntRect(positions[i].X, positions[i].Y, 30, 30).contains(Mouse::getPosition(window)))
 					{
-						window.close();
+						index_clicked_letter = i;
+						cout << eng_alphabet[index_clicked_letter] << "\n";
+
+						// Проверяем букву пользователя
+						for (int i = 0; i < words_amount; i++)
+						{
+							// Если нажатая буква = переборной букве
+							if (eng_alphabet[index_clicked_letter] == random_word[i])
+							{
+								hidden_word[i * 2] = eng_alphabet[index_clicked_letter];
+								text.setString(hidden_word);
+								text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
+							}
+						}
 					}
 				}
+
 			}
 		}
 
