@@ -82,11 +82,17 @@ void game(RenderWindow& window)
 	font.loadFromFile("font/dejavu.ttf");
 
 	sf::Text text;
-	text.setPosition(758, 200);
+	//sf::FloatRect textRect = text.getLocalBounds();
+	//text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	string random_word = GetWord();
+	int words_amount = random_word.length();
+
+	int x_pos_answ = (668 + (words_amount * 40));
+	text.setPosition(x_pos_answ, 200);
 	text.setFont(font);
 	text.setCharacterSize(40);
 	text.setFillColor(sf::Color(78, 60, 33)); 
-	text.setString(GetWord());
+	text.setString(random_word);
 
 	int cursor_enter = 0;
 
