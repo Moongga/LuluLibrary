@@ -25,9 +25,6 @@ void game(RenderWindow& window)
 
 	// Массив с английским алфавитом
 	string eng_alphabet = "abcdefghijklmnopqrstuvwxyz";
-	// Массив уже ранее нажатых букв
-	string words_blacklist;
-	int amount_right_answers = 0;
 
 	int tries_amount = 6;
 
@@ -38,7 +35,7 @@ void game(RenderWindow& window)
 		string path_wrong = "images/keyboard/english/wrong/" + to_string(0) + "-" + to_string(i) + ".png";
 		ts[i].loadFromFile(path); // загружаем обычные 26 букв
 		ts_right[i].loadFromFile(path_right); // загружаем 26 правильных букв
-		ts_wrong[i].loadFromFile(path_wrong); // загружаем 26 правильных букв
+		ts_wrong[i].loadFromFile(path_wrong); // загружаем 26 неправильных букв
 	}
 
 	// устанавливаем текстуры на спрайты
@@ -133,9 +130,6 @@ void game(RenderWindow& window)
 
 	int index_clicked_letter;
 
-	//bool pressed_mouse = false;
-	//bool pressed_mouse[letters_count];
-	//fill_n(pressed_mouse, letters_count, false);
 	while (window.isOpen())
 	{
 		// Создание ивента для работы с кнопками
@@ -155,15 +149,6 @@ void game(RenderWindow& window)
 						int comparate = words_left;
 
 						index_clicked_letter = i;
-						//// Проверка на то, есть ли буква в чёрном списке
-						//for (int i = 0; i < words_blacklist.length(); i++)
-						//{
-						//	if (eng_alphabet[index_clicked_letter] == words_blacklist[i])
-						//	{
-						//		cout << "This word was already pressed before\n";
-						//		break;
-						//	}
-						//}
 						cout << eng_alphabet[index_clicked_letter] << "\n";
 
 						// Проверяем букву пользователя
@@ -172,12 +157,10 @@ void game(RenderWindow& window)
 							// Если нажатая буква = переборной букве
 							if (eng_alphabet[index_clicked_letter] == random_word[a])
 							{
-								amount_right_answers++;
 								right_sprites[index_clicked_letter].setTexture(ts_right[index_clicked_letter]);
 								right_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
 								
 								words_left--;
-								words_blacklist.push_back(eng_alphabet[index_clicked_letter]);
 								hidden_word[a * 2] = eng_alphabet[index_clicked_letter];
 								text.setString(hidden_word);
 								text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
@@ -194,10 +177,8 @@ void game(RenderWindow& window)
 							text_tries_amount.setString(to_string(tries_amount));
 							text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
 						}
-
-
-						positions[i].X = 0;
-						positions[i].Y = 0;
+						positions[i].X = 9999;
+						positions[i].Y = 9999;
 					}
 				}
 			}
@@ -220,14 +201,14 @@ void game(RenderWindow& window)
 		if (tries_amount == 0)
 		{
 			MessageBox(0, L"Unfortunately, you lost", L"Defeat", MB_OK);
-			break;
+			window.close();
 		}
 
 		// Если все слова отгаданы, то победа
 		if (words_left == 0 && tries_amount > 0)
 		{
 			MessageBox(0, L"Congratulations, you won!", L"Win", MB_OK);
-			break;
+			window.close();
 		}
 	}
 }
