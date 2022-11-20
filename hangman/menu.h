@@ -15,9 +15,6 @@ void menu(RenderWindow& window)
     sf::Sprite Start(StartT), Quit(QuitT), Bg(BackgroundT);
     Bg.setPosition(0, 0);
 
-    StartT.loadFromFile("images/main_menu/Start_uncursored.png");
-    QuitT.loadFromFile("images/main_menu/Quit_uncursored.png");
-
     Start.setPosition(390, 420);
     Quit.setPosition(390, 520);
     while (window.isOpen())
@@ -52,11 +49,11 @@ void menu(RenderWindow& window)
             }
 
             // Проверка на то, попадает ли курсор мышки в область кнопок для того, чтобы сделать эффект наведения
-			if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
+			if (IntRect(390, 421, 240, 65).contains(Mouse::getPosition(window)))
 			{
 				StartT.loadFromFile("images/main_menu/Start_cursored.png");
 			}
-			if (IntRect(390, 520, 240, 60).contains(Mouse::getPosition(window)))
+			if (IntRect(390, 521, 240, 65).contains(Mouse::getPosition(window)))
 			{
 				QuitT.loadFromFile("images/main_menu/Quit_cursored.png");
 			}

@@ -19,23 +19,28 @@ void game(RenderWindow& window)
 	// Текстуры букв
 	const int letters_count = 26;
 	Texture ts[letters_count];
+	Texture ts_right[letters_count];
 
 	// Массив с английским алфавитом
 	string eng_alphabet = "abcdefghijklmnopqrstuvwxyz";
 	// Массив уже ранее нажатых букв
 	string words_blacklist;
+	int amount_right_answers = 0;
 
 	int tries_amount = 6;
 
 	for (int i = 0; i < letters_count; i++)
 	{
 		string path = "images/keyboard/english/uncursored/" + to_string(i) + ".png";
-		ts[i].loadFromFile(path); // по очереди это будут все 26 буквы
+		string path_right = "images/keyboard/english/right/" + to_string(1) + "-" + to_string(i) + ".png";
+		ts[i].loadFromFile(path); // загружаем обычные 26 букв
+		ts_right[i].loadFromFile(path_right); // загружаем 26 правильных букв
 	}
 
 	// устанавливаем текстуры на спрайты
 	// каждому спрайту необходимо задать текстуру
 	sf::Sprite sprites[letters_count];
+	sf::Sprite right_sprites[letters_count];
 
 	// Координаты картинок с буквами
 	int y = 277;
@@ -75,6 +80,7 @@ void game(RenderWindow& window)
 
 	for (int i = 0; i < letters_count; i++)
 	{
+		
 		sprites[i].setTexture(ts[i]);
 		sprites[i].setPosition(positions[i].X, positions[i].Y);
 	}
@@ -145,26 +151,30 @@ void game(RenderWindow& window)
 						int comparate = words_left;
 
 						index_clicked_letter = i;
-						// Проверка на то, есть ли буква в чёрном списке
-						for (int i = 0; i < words_blacklist.length(); i++)
-						{
-							if (eng_alphabet[index_clicked_letter] == words_blacklist[i])
-							{
-								cout << "This word was already pressed before\n";
-								break;
-							}
-						}
+						//// Проверка на то, есть ли буква в чёрном списке
+						//for (int i = 0; i < words_blacklist.length(); i++)
+						//{
+						//	if (eng_alphabet[index_clicked_letter] == words_blacklist[i])
+						//	{
+						//		cout << "This word was already pressed before\n";
+						//		break;
+						//	}
+						//}
 						cout << eng_alphabet[index_clicked_letter] << "\n";
 
 						// Проверяем букву пользователя
-						for (int i = 0; i < words_amount; i++)
+						for (int a = 0; a < words_amount; a++)
 						{
 							// Если нажатая буква = переборной букве
-							if (eng_alphabet[index_clicked_letter] == random_word[i])
+							if (eng_alphabet[index_clicked_letter] == random_word[a])
 							{
+								amount_right_answers++;
+								right_sprites[index_clicked_letter].setTexture(ts_right[index_clicked_letter]);
+								right_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+								
 								words_left--;
 								words_blacklist.push_back(eng_alphabet[index_clicked_letter]);
-								hidden_word[i * 2] = eng_alphabet[index_clicked_letter];
+								hidden_word[a * 2] = eng_alphabet[index_clicked_letter];
 								text.setString(hidden_word);
 								text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
 							}
@@ -181,16 +191,16 @@ void game(RenderWindow& window)
 						// Если попытки закончились, то поражение
 						if (tries_amount == 0)
 						{
-							Sleep(5000);
+							cout << "Defeat";
 							window.close();
 						}
 
-						//// Если все слова отгаданы, то победа
-						//if (words_left == 0 && tries_amount > 0)
-						//{
-						//	Sleep(5000);
-						//	window.close();
-						//}
+						// Если все слова отгаданы, то победа
+						if (words_left == 0 && tries_amount > 0)
+						{
+							cout << "Win!";
+
+						}
 						positions[i].X = 0;
 						positions[i].Y = 0;
 					}
@@ -204,6 +214,11 @@ void game(RenderWindow& window)
 		for (int i = 0; i < letters_count; i++)
 		{
 			window.draw(sprites[i]);
+		}
+		
+		for (int i = 0; i < letters_count; i++)
+		{
+			window.draw(right_sprites[i]);
 		}
 		window.draw(text_tries_amount);
 		window.draw(text);
