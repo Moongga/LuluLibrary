@@ -6,6 +6,7 @@
 #include "files.h"
 #include <string>
 #include <sstream>
+#include <WinUser.h>
 using namespace sf;
 using namespace std;
 
@@ -20,6 +21,7 @@ void game(RenderWindow& window)
 	const int letters_count = 26;
 	Texture ts[letters_count];
 	Texture ts_right[letters_count];
+	Texture ts_wrong[letters_count];
 
 	// Массив с английским алфавитом
 	string eng_alphabet = "abcdefghijklmnopqrstuvwxyz";
@@ -33,14 +35,17 @@ void game(RenderWindow& window)
 	{
 		string path = "images/keyboard/english/uncursored/" + to_string(i) + ".png";
 		string path_right = "images/keyboard/english/right/" + to_string(1) + "-" + to_string(i) + ".png";
+		string path_wrong = "images/keyboard/english/wrong/" + to_string(0) + "-" + to_string(i) + ".png";
 		ts[i].loadFromFile(path); // загружаем обычные 26 букв
 		ts_right[i].loadFromFile(path_right); // загружаем 26 правильных букв
+		ts_wrong[i].loadFromFile(path_wrong); // загружаем 26 правильных букв
 	}
 
 	// устанавливаем текстуры на спрайты
 	// каждому спрайту необходимо задать текстуру
 	sf::Sprite sprites[letters_count];
 	sf::Sprite right_sprites[letters_count];
+	sf::Sprite wrong_sprites[letters_count];
 
 	// Координаты картинок с буквами
 	int y = 277;
@@ -80,7 +85,6 @@ void game(RenderWindow& window)
 
 	for (int i = 0; i < letters_count; i++)
 	{
-		
 		sprites[i].setTexture(ts[i]);
 		sprites[i].setPosition(positions[i].X, positions[i].Y);
 	}
@@ -183,24 +187,15 @@ void game(RenderWindow& window)
 						// Если переменные равны, значит входа в цикл не было (и переменная words_left не снижалась), в следствии чего буква не была отгадана
 						if (comparate == words_left)
 						{
+							wrong_sprites[index_clicked_letter].setTexture(ts_wrong[index_clicked_letter]);
+							wrong_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+
 							tries_amount--;
 							text_tries_amount.setString(to_string(tries_amount));
 							text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
 						}
 
-						// Если попытки закончились, то поражение
-						if (tries_amount == 0)
-						{
-							cout << "Defeat";
-							window.close();
-						}
 
-						// Если все слова отгаданы, то победа
-						if (words_left == 0 && tries_amount > 0)
-						{
-							cout << "Win!";
-
-						}
 						positions[i].X = 0;
 						positions[i].Y = 0;
 					}
@@ -214,14 +209,25 @@ void game(RenderWindow& window)
 		for (int i = 0; i < letters_count; i++)
 		{
 			window.draw(sprites[i]);
-		}
-		
-		for (int i = 0; i < letters_count; i++)
-		{
 			window.draw(right_sprites[i]);
+			window.draw(wrong_sprites[i]);
 		}
 		window.draw(text_tries_amount);
 		window.draw(text);
 		window.display();
+
+		// Если попытки закончились, то поражение
+		if (tries_amount == 0)
+		{
+			MessageBox(0, L"Unfortunately, you lost", L"Defeat", MB_OK);
+			break;
+		}
+
+		// Если все слова отгаданы, то победа
+		if (words_left == 0 && tries_amount > 0)
+		{
+			MessageBox(0, L"Congratulations, you won!", L"Win", MB_OK);
+			break;
+		}
 	}
 }
