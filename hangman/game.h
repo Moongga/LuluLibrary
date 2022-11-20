@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "files.h"
 #include <string>
+#include <sstream>
 using namespace sf;
 using namespace std;
 
@@ -21,6 +22,10 @@ void game(RenderWindow& window)
 
 	// Массив с английским алфавитом
 	string eng_alphabet = "abcdefghijklmnopqrstuvwxyz";
+	// Массив уже ранее нажатых букв
+	string words_blacklist;
+
+	int tries_amount = 6;
 
 	for (int i = 0; i < letters_count; i++)
 	{
@@ -76,7 +81,7 @@ void game(RenderWindow& window)
 
 	// Текстура фона игры
 	Texture tx_game_scene;
-	tx_game_scene.loadFromFile("images/clear_game-scene.png");
+	tx_game_scene.loadFromFile("images/fullclear_game-scene.png");
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
@@ -85,6 +90,8 @@ void game(RenderWindow& window)
 	// переменная для вывода скрытого слова с нижнем подчёркиванием
 	string hidden_word;
 	int words_amount = random_word.length();
+	int words_left = words_amount;
+
 	cout << words_amount << "\n" << random_word << endl;
 
 	for (int i = 0; i < words_amount; i++)
@@ -97,6 +104,7 @@ void game(RenderWindow& window)
 	sf::Font font;
 	font.loadFromFile("font/dejavu.ttf");
 
+	// Текст загаданного слова
 	sf::Text text;
 	text.setFont(font);
 	text.setCharacterSize(40);
@@ -105,9 +113,17 @@ void game(RenderWindow& window)
 	const int centerPos = 820;
 	text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200); // getGlobalBounds().width - измеряет ширину текста
 
+	// Текст попыток
+	sf::Text text_tries_amount;
+	text_tries_amount.setFont(font);
+	text_tries_amount.setCharacterSize(30);
+	text_tries_amount.setFillColor(sf::Color(160, 141, 50));
+	text_tries_amount.setString(to_string(tries_amount));
+	text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
+
 	int index_clicked_letter;
 
-	bool pressed_mouse = false;
+	//bool pressed_mouse = false;
 	//bool pressed_mouse[letters_count];
 	//fill_n(pressed_mouse, letters_count, false);
 	while (window.isOpen())
@@ -125,7 +141,19 @@ void game(RenderWindow& window)
 				{
 					if (IntRect(positions[i].X, positions[i].Y, 30, 30).contains(Mouse::getPosition(window)))
 					{
+						// Переменная для выявления, отгадал ли пользователь букву, или нет (в таком случае рисуется часть человечка)
+						int comparate = words_left;
+
 						index_clicked_letter = i;
+						// Проверка на то, есть ли буква в чёрном списке
+						for (int i = 0; i < words_blacklist.length(); i++)
+						{
+							if (eng_alphabet[index_clicked_letter] == words_blacklist[i])
+							{
+								cout << "This word was already pressed before\n";
+								break;
+							}
+						}
 						cout << eng_alphabet[index_clicked_letter] << "\n";
 
 						// Проверяем букву пользователя
@@ -134,14 +162,39 @@ void game(RenderWindow& window)
 							// Если нажатая буква = переборной букве
 							if (eng_alphabet[index_clicked_letter] == random_word[i])
 							{
+								words_left--;
+								words_blacklist.push_back(eng_alphabet[index_clicked_letter]);
 								hidden_word[i * 2] = eng_alphabet[index_clicked_letter];
 								text.setString(hidden_word);
 								text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
 							}
 						}
+
+						// Если переменные равны, значит входа в цикл не было (и переменная words_left не снижалась), в следствии чего буква не была отгадана
+						if (comparate == words_left)
+						{
+							tries_amount--;
+							text_tries_amount.setString(to_string(tries_amount));
+							text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
+						}
+
+						// Если попытки закончились, то поражение
+						if (tries_amount == 0)
+						{
+							Sleep(5000);
+							window.close();
+						}
+
+						//// Если все слова отгаданы, то победа
+						//if (words_left == 0 && tries_amount > 0)
+						//{
+						//	Sleep(5000);
+						//	window.close();
+						//}
+						positions[i].X = 0;
+						positions[i].Y = 0;
 					}
 				}
-
 			}
 		}
 
@@ -152,6 +205,7 @@ void game(RenderWindow& window)
 		{
 			window.draw(sprites[i]);
 		}
+		window.draw(text_tries_amount);
 		window.draw(text);
 		window.display();
 	}
