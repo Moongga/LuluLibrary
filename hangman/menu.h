@@ -37,7 +37,6 @@ void menu(RenderWindow& window)
             {
                 if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
                 {
-                    
                     game(window);
                     //while (!Keyboard::isKeyPressed(Keyboard::Escape));
                 }

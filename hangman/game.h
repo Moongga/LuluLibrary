@@ -92,6 +92,19 @@ void game(RenderWindow& window)
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
+	// Загружаем плашку с победой
+	Texture tx_win_pop_up;
+	tx_win_pop_up.loadFromFile("images/victory-or-defeat/victory_pre-finish.png");
+	Sprite win_pop_up(tx_win_pop_up);
+
+	// Загружаем кнопки для победы или поражения
+	Texture tx_unc_start_again, tx_curs_start_again, tx_unc_exit, tx_curs_exit;
+	tx_unc_start_again.loadFromFile("images/victory-or-defeat/uncursored_start-again.png");
+	tx_curs_start_again.loadFromFile("images/victory-or-defeat/uncursored_start-again.png");
+	tx_unc_exit.loadFromFile("images/victory-or-defeat/uncursored_exit.png");
+	tx_curs_exit.loadFromFile("images/victory-or-defeat/cursored_exit.png");
+	Sprite unc_start_again(tx_unc_start_again), curs_start_again(tx_curs_start_again), unc_exit(tx_unc_exit), curs_exit(tx_curs_exit);
+
 	/// Работа с загаданным словом
 	string random_word = GetWord();
 	// переменная для вывода скрытого слова с нижнем подчёркиванием
@@ -130,6 +143,8 @@ void game(RenderWindow& window)
 
 	int index_clicked_letter;
 
+	bool is_cursored = false;
+
 	while (window.isOpen())
 	{
 		// Создание ивента для работы с кнопками
@@ -137,54 +152,89 @@ void game(RenderWindow& window)
 
 		while (window.pollEvent(event))
 		{
+			if (words_left == 0 && tries_amount > 0)
+			{
+				unc_start_again.setPosition(196, 569);
+			}
+			//is_cursored = false;
+
 			// Нажатие кнопок
 			if (Mouse::isButtonPressed(Mouse::Left))
 			{
-				// Проверка реагирования нажатия на 26 букв
-				for (int i = 0; i < letters_count; i++)
+				if (!(words_left == 0 && tries_amount > 0))
 				{
-					if (IntRect(positions[i].X, positions[i].Y, 30, 30).contains(Mouse::getPosition(window)))
+					// Проверка реагирования нажатия на 26 букв
+					for (int i = 0; i < letters_count; i++)
 					{
-						// Переменная для выявления, отгадал ли пользователь букву, или нет (в таком случае рисуется часть человечка)
-						int comparate = words_left;
-
-						index_clicked_letter = i;
-						cout << eng_alphabet[index_clicked_letter] << "\n";
-
-						// Проверяем букву пользователя
-						for (int a = 0; a < words_amount; a++)
+						if (IntRect(positions[i].X, positions[i].Y, 30, 30).contains(Mouse::getPosition(window)))
 						{
-							// Если нажатая буква = переборной букве
-							if (eng_alphabet[index_clicked_letter] == random_word[a])
+							// Переменная для выявления, отгадал ли пользователь букву, или нет (в таком случае рисуется часть человечка)
+							int comparate = words_left;
+
+							index_clicked_letter = i;
+							cout << eng_alphabet[index_clicked_letter] << "\n";
+
+							// Проверяем букву пользователя
+							for (int a = 0; a < words_amount; a++)
 							{
-								right_sprites[index_clicked_letter].setTexture(ts_right[index_clicked_letter]);
-								right_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
-								
-								words_left--;
-								hidden_word[a * 2] = eng_alphabet[index_clicked_letter];
-								text.setString(hidden_word);
-								text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
+								// Если нажатая буква = переборной букве
+								if (eng_alphabet[index_clicked_letter] == random_word[a])
+								{
+									right_sprites[index_clicked_letter].setTexture(ts_right[index_clicked_letter]);
+									right_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+
+									words_left--;
+									hidden_word[a * 2] = eng_alphabet[index_clicked_letter];
+									text.setString(hidden_word);
+									text.setPosition(centerPos - text.getGlobalBounds().width / 2, 200);
+								}
+							}
+
+							// Если переменные равны, значит входа в цикл не было (и переменная words_left не снижалась), в следствии чего буква не была отгадана
+							if (comparate == words_left)
+							{
+								wrong_sprites[index_clicked_letter].setTexture(ts_wrong[index_clicked_letter]);
+								wrong_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+
+								tries_amount--;
+								text_tries_amount.setString(to_string(tries_amount));
+								text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
+							}
+							positions[i].X = 9999;
+							positions[i].Y = 9999;
+
+							// Если все слова отгаданы, то победа
+							if (words_left == 0 && tries_amount > 0)
+							{
+								win_pop_up.setPosition(0, 0);
+								unc_start_again.setPosition(196, 569);
+								unc_exit.setPosition(594, 569);
 							}
 						}
-
-						// Если переменные равны, значит входа в цикл не было (и переменная words_left не снижалась), в следствии чего буква не была отгадана
-						if (comparate == words_left)
-						{
-							wrong_sprites[index_clicked_letter].setTexture(ts_wrong[index_clicked_letter]);
-							wrong_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
-
-							tries_amount--;
-							text_tries_amount.setString(to_string(tries_amount));
-							text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
-						}
-						positions[i].X = 9999;
-						positions[i].Y = 9999;
 					}
+				}
+				else
+				{
+					if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
+					{
+						game(window);
+					}
+					if (IntRect(594, 569, 240, 60).contains(Mouse::getPosition(window)))
+					{
+						window.close();
+					}
+
+					//if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
+					//{
+					//	is_cursored = true;
+					//	curs_start_again.setPosition(196, 569);
+					//}
+
 				}
 			}
 		}
 
-		window.clear();
+		//window.clear();
 		window.draw(Backgr);
 		// Цикл для отображение картинок букв
 		for (int i = 0; i < letters_count; i++)
@@ -195,19 +245,22 @@ void game(RenderWindow& window)
 		}
 		window.draw(text_tries_amount);
 		window.draw(text);
+		if (words_left == 0 && tries_amount > 0)
+		{
+			window.draw(win_pop_up);
+			window.draw(unc_start_again);
+			window.draw(unc_exit);
+			//if (is_cursored)
+			//{
+			//	window.draw(curs_start_again);
+			//}
+		}
 		window.display();
 
 		// Если попытки закончились, то поражение
 		if (tries_amount == 0)
 		{
 			MessageBox(0, L"Unfortunately, you lost", L"Defeat", MB_OK);
-			window.close();
-		}
-
-		// Если все слова отгаданы, то победа
-		if (words_left == 0 && tries_amount > 0)
-		{
-			MessageBox(0, L"Congratulations, you won!", L"Win", MB_OK);
 			window.close();
 		}
 	}
