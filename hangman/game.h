@@ -88,7 +88,7 @@ void game(RenderWindow& window)
 
 	// Текстура фона игры
 	Texture tx_game_scene;
-	tx_game_scene.loadFromFile("images/fullclear_game-scene.png");
+	tx_game_scene.loadFromFile("images/english_game-scene.png");
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
