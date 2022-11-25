@@ -97,10 +97,15 @@ void game(RenderWindow& window)
 	tx_win_pop_up.loadFromFile("images/victory-or-defeat/victory_pre-finish.png");
 	Sprite win_pop_up(tx_win_pop_up);
 
+	// Загружаем плашку с поражением
+	Texture tx_defeat_pop_up;
+	tx_defeat_pop_up.loadFromFile("images/victory-or-defeat/defeat_pre-finish.png");
+	Sprite defeat_pop_up(tx_defeat_pop_up);
+
 	// Загружаем кнопки для победы или поражения
 	Texture tx_unc_start_again, tx_curs_start_again, tx_unc_exit, tx_curs_exit;
 	tx_unc_start_again.loadFromFile("images/victory-or-defeat/uncursored_start-again.png");
-	tx_curs_start_again.loadFromFile("images/victory-or-defeat/uncursored_start-again.png");
+	tx_curs_start_again.loadFromFile("images/victory-or-defeat/cursored_start-again.png");
 	tx_unc_exit.loadFromFile("images/victory-or-defeat/uncursored_exit.png");
 	tx_curs_exit.loadFromFile("images/victory-or-defeat/cursored_exit.png");
 	Sprite unc_start_again(tx_unc_start_again), curs_start_again(tx_curs_start_again), unc_exit(tx_unc_exit), curs_exit(tx_curs_exit);
@@ -143,8 +148,6 @@ void game(RenderWindow& window)
 
 	int index_clicked_letter;
 
-	bool is_cursored = false;
-
 	while (window.isOpen())
 	{
 		// Создание ивента для работы с кнопками
@@ -152,11 +155,14 @@ void game(RenderWindow& window)
 
 		while (window.pollEvent(event))
 		{
-			if (words_left == 0 && tries_amount > 0)
+			if ((words_left == 0 && tries_amount > 0) || (tries_amount == 0))
 			{
+				tx_unc_start_again.loadFromFile("images/victory-or-defeat/uncursored_start-again.png");
 				unc_start_again.setPosition(196, 569);
+
+				tx_unc_exit.loadFromFile("images/victory-or-defeat/uncursored_exit.png");
+				unc_exit.setPosition(594, 569);
 			}
-			//is_cursored = false;
 
 			// Нажатие кнопок
 			if (Mouse::isButtonPressed(Mouse::Left))
@@ -210,9 +216,18 @@ void game(RenderWindow& window)
 								unc_start_again.setPosition(196, 569);
 								unc_exit.setPosition(594, 569);
 							}
+
+							// Если попытки закончились, то поражение
+							if (tries_amount == 0)
+							{
+								defeat_pop_up.setPosition(0, 0);
+								unc_start_again.setPosition(196, 569);
+								unc_exit.setPosition(594, 569);
+							}
 						}
 					}
 				}
+				// Проверка нажатия кнопок для выигрыша
 				else
 				{
 					if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
@@ -223,18 +238,38 @@ void game(RenderWindow& window)
 					{
 						window.close();
 					}
+				}
 
-					//if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
-					//{
-					//	is_cursored = true;
-					//	curs_start_again.setPosition(196, 569);
-					//}
+				// Проверка нажатия кнопок для проигрыша
+				if (tries_amount == 0)
+				{
+					if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
+					{
+						game(window);
+					}
+					if (IntRect(594, 569, 240, 60).contains(Mouse::getPosition(window)))
+					{
+						window.close();
+					}
+				}
+			}
 
+			// проверки наведённых кнопок для выигрыша/проигрыша
+			if ((words_left == 0 && tries_amount > 0) || (tries_amount == 0))
+			{
+				if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
+				{
+					tx_unc_start_again.loadFromFile("images/victory-or-defeat/cursored_start-again.png"); // наведённая кнопка "начать сначала"
+					unc_start_again.setPosition(196, 569);
+				}
+				if (IntRect(594, 569, 240, 60).contains(Mouse::getPosition(window)))
+				{
+					tx_unc_exit.loadFromFile("images/victory-or-defeat/cursored_exit.png"); // наведённая кнопка "выход"
+					unc_exit.setPosition(594, 569);
 				}
 			}
 		}
 
-		//window.clear();
 		window.draw(Backgr);
 		// Цикл для отображение картинок букв
 		for (int i = 0; i < letters_count; i++)
@@ -245,23 +280,22 @@ void game(RenderWindow& window)
 		}
 		window.draw(text_tries_amount);
 		window.draw(text);
+
+		// изображение плашки/кнопки для победы
 		if (words_left == 0 && tries_amount > 0)
 		{
 			window.draw(win_pop_up);
 			window.draw(unc_start_again);
 			window.draw(unc_exit);
-			//if (is_cursored)
-			//{
-			//	window.draw(curs_start_again);
-			//}
 		}
-		window.display();
 
-		// Если попытки закончились, то поражение
+		// изображение плашки/кнопки для поражения
 		if (tries_amount == 0)
 		{
-			MessageBox(0, L"Unfortunately, you lost", L"Defeat", MB_OK);
-			window.close();
+			window.draw(defeat_pop_up);
+			window.draw(unc_start_again);
+			window.draw(unc_exit);
 		}
+		window.display();
 	}
 }
