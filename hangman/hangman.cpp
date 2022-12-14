@@ -4,7 +4,6 @@
 #include <windows.h>
 #include "menu.h"
 #include "game.h"
-
 using namespace sf;
 
 /// <summary>
@@ -31,6 +30,8 @@ bool Menu()
 /// <returns></returns>
 int main()
 {
+    LoadMainTheme();
+    LoadClick();
     //StartGame();
     Menu();
 }

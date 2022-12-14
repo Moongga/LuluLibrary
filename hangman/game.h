@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <WinUser.h>
+#include "load-music.h"
 using namespace sf;
 using namespace std;
 
@@ -88,18 +89,18 @@ void game(RenderWindow& window)
 
 	// Текстура фона игры
 	Texture tx_game_scene;
-	tx_game_scene.loadFromFile("images/english_game-scene.png");
+	tx_game_scene.loadFromFile("images/game-scene.png");
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
 	// Загружаем плашку с победой
 	Texture tx_win_pop_up;
-	tx_win_pop_up.loadFromFile("images/victory-or-defeat/victory_pre-finish.png");
+	tx_win_pop_up.loadFromFile("images/victory-or-defeat/victory.png");
 	Sprite win_pop_up(tx_win_pop_up);
 
 	// Загружаем плашку с поражением
 	Texture tx_defeat_pop_up;
-	tx_defeat_pop_up.loadFromFile("images/victory-or-defeat/defeat_pre-finish.png");
+	tx_defeat_pop_up.loadFromFile("images/victory-or-defeat/defeat.png");
 	Sprite defeat_pop_up(tx_defeat_pop_up);
 
 	// Загружаем кнопки для победы или поражения
@@ -183,6 +184,7 @@ void game(RenderWindow& window)
 							// Проверяем букву пользователя
 							for (int a = 0; a < words_amount; a++)
 							{
+								click.play(); // звук пык при нажатии
 								// Если нажатая буква = переборной букве
 								if (eng_alphabet[index_clicked_letter] == random_word[a])
 								{
@@ -213,14 +215,25 @@ void game(RenderWindow& window)
 							if (words_left == 0 && tries_amount > 0)
 							{
 								win_pop_up.setPosition(0, 0);
+								
+								text.setCharacterSize(26);
+								text.setString(random_word);
+								text.setPosition(540, 242);
+
 								unc_start_again.setPosition(196, 569);
 								unc_exit.setPosition(594, 569);
+								
 							}
 
 							// Если попытки закончились, то поражение
 							if (tries_amount == 0)
 							{
 								defeat_pop_up.setPosition(0, 0);
+
+								text.setCharacterSize(26);
+								text.setString(random_word);
+								text.setPosition(694, 242);
+
 								unc_start_again.setPosition(196, 569);
 								unc_exit.setPosition(594, 569);
 							}
@@ -232,10 +245,16 @@ void game(RenderWindow& window)
 				{
 					if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
 					{
+						LoadClick();
+						click.play();
+						Sleep(50);
 						game(window);
 					}
 					if (IntRect(594, 569, 240, 60).contains(Mouse::getPosition(window)))
 					{
+						LoadClick();
+						click.play();
+						Sleep(50);
 						window.close();
 					}
 				}
@@ -245,10 +264,16 @@ void game(RenderWindow& window)
 				{
 					if (IntRect(196, 569, 240, 60).contains(Mouse::getPosition(window)))
 					{
+						LoadClick();
+						click.play();
+						Sleep(50);
 						game(window);
 					}
 					if (IntRect(594, 569, 240, 60).contains(Mouse::getPosition(window)))
 					{
+						LoadClick();
+						click.play();
+						Sleep(50);
 						window.close();
 					}
 				}
@@ -279,8 +304,7 @@ void game(RenderWindow& window)
 			window.draw(wrong_sprites[i]);
 		}
 		window.draw(text_tries_amount);
-		window.draw(text);
-
+		
 		// изображение плашки/кнопки для победы
 		if (words_left == 0 && tries_amount > 0)
 		{
@@ -296,6 +320,7 @@ void game(RenderWindow& window)
 			window.draw(unc_start_again);
 			window.draw(unc_exit);
 		}
+		window.draw(text);
 		window.display();
 	}
 }

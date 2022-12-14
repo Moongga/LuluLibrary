@@ -1,10 +1,11 @@
 ﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
-//#include <SFML/Audio.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
-#include <windows.h>
+#include "windows.h"
 #include "game.h"
+#include "load-music.h"
 using namespace sf;
 
 void menu(RenderWindow& window)
@@ -18,18 +19,6 @@ void menu(RenderWindow& window)
 
     Start.setPosition(390, 420);
     Quit.setPosition(390, 520);
-
-    //Music main_theme;
-    //main_theme.openFromFile("music/harry.ogg");
-    //main_theme.setLoop(true);
-    //main_theme.setVolume(30);
-    //main_theme.play();
-
-	/*Music click;
-	click.openFromFile("music/click.ogg");
-	click.setLoop(false);
-	click.setVolume(100);
-	click.setPlayingOffset(sf::milliseconds(250));*/
 
     while (window.isOpen())
     {
@@ -51,10 +40,14 @@ void menu(RenderWindow& window)
             {
                 if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
                 {
+                    click.play();
+                    Sleep(50);
                     game(window);
                 }
                 if (IntRect(390, 520, 240, 60).contains(Mouse::getPosition(window)))
                 {
+                    click.play();
+                    Sleep(50);
                     window.close();
                 }
             }

@@ -29,6 +29,9 @@
     <ClInclude Include="files.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="load-music.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
