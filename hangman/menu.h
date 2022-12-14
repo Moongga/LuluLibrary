@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
+//#include <SFML/Audio.hpp>
 #include <iostream>
 #include <windows.h>
 #include "game.h"
@@ -17,6 +18,19 @@ void menu(RenderWindow& window)
 
     Start.setPosition(390, 420);
     Quit.setPosition(390, 520);
+
+    //Music main_theme;
+    //main_theme.openFromFile("music/harry.ogg");
+    //main_theme.setLoop(true);
+    //main_theme.setVolume(30);
+    //main_theme.play();
+
+	/*Music click;
+	click.openFromFile("music/click.ogg");
+	click.setLoop(false);
+	click.setVolume(100);
+	click.setPlayingOffset(sf::milliseconds(250));*/
+
     while (window.isOpen())
     {
         // создание ивента для работы с 
@@ -38,12 +52,10 @@ void menu(RenderWindow& window)
                 if (IntRect(390, 420, 240, 60).contains(Mouse::getPosition(window)))
                 {
                     game(window);
-                    //while (!Keyboard::isKeyPressed(Keyboard::Escape));
                 }
                 if (IntRect(390, 520, 240, 60).contains(Mouse::getPosition(window)))
                 {
                     window.close();
-                    //isMenu = false;
                 }
             }
 

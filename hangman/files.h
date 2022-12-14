@@ -7,7 +7,7 @@
 using namespace std;
 
 string GetWord() {
-	const int countLines = 22;
+	const int countLines = 52;
 	const std::string fileName = "English-words.txt";
 	std::ifstream inFile(fileName);
 

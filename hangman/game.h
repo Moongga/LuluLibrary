@@ -30,9 +30,9 @@ void game(RenderWindow& window)
 
 	for (int i = 0; i < letters_count; i++)
 	{
-		string path = "images/keyboard/english/uncursored/" + to_string(i) + ".png";
-		string path_right = "images/keyboard/english/right/" + to_string(1) + "-" + to_string(i) + ".png";
-		string path_wrong = "images/keyboard/english/wrong/" + to_string(0) + "-" + to_string(i) + ".png";
+		string path = "images/keyboard/uncursored/" + to_string(i) + ".png";
+		string path_right = "images/keyboard/right/" + to_string(1) + "-" + to_string(i) + ".png";
+		string path_wrong = "images/keyboard/wrong/" + to_string(0) + "-" + to_string(i) + ".png";
 		ts[i].loadFromFile(path); // загружаем обычные 26 букв
 		ts_right[i].loadFromFile(path_right); // загружаем 26 правильных букв
 		ts_wrong[i].loadFromFile(path_wrong); // загружаем 26 неправильных букв
