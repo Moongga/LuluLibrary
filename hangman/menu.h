@@ -53,14 +53,14 @@ void menu(RenderWindow& window)
             }
 
             // Проверка на то, попадает ли курсор мышки в область кнопок для того, чтобы сделать эффект наведения
-			if (IntRect(390, 421, 240, 65).contains(Mouse::getPosition(window)))
-			{
-				StartT.loadFromFile("images/main_menu/Start_cursored.png");
-			}
-			if (IntRect(390, 521, 240, 65).contains(Mouse::getPosition(window)))
-			{
-				QuitT.loadFromFile("images/main_menu/Quit_cursored.png");
-			}
+            if (IntRect(390, 421, 240, 65).contains(Mouse::getPosition(window)))
+            {
+                StartT.loadFromFile("images/main_menu/Start_cursored.png");
+            }
+            if (IntRect(390, 521, 240, 65).contains(Mouse::getPosition(window)))
+            {
+                QuitT.loadFromFile("images/main_menu/Quit_cursored.png");
+            }
         }
 
         window.clear();

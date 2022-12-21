@@ -93,6 +93,22 @@ void game(RenderWindow& window)
 	Sprite Backgr(tx_game_scene);
 	Backgr.setPosition(0, 0);
 
+	// Текстура изначального кота
+	Texture tx_cat;
+	tx_cat.loadFromFile("images/calm-cat.png");
+	Sprite Cat(tx_cat);
+	Cat.setPosition(140, 264);
+
+	//Текстура радостного кота
+	Texture tx_cat_happy;
+	tx_cat_happy.loadFromFile("images/happy-cat.png");
+	Sprite HappyCat(tx_cat_happy);
+
+	//Текстура грустного кота
+	Texture tx_cat_sad;
+	tx_cat_sad.loadFromFile("images/sad-cat.png");
+	Sprite SadCat(tx_cat_sad);
+
 	// Загружаем плашку с победой
 	Texture tx_win_pop_up;
 	tx_win_pop_up.loadFromFile("images/victory-or-defeat/victory.png");
@@ -148,6 +164,8 @@ void game(RenderWindow& window)
 	text_tries_amount.setPosition(974 - text_tries_amount.getGlobalBounds().width / 2, 101);
 
 	int index_clicked_letter;
+	bool happy_animate = false;
+	bool sad_animate = false;
 
 	while (window.isOpen())
 	{
@@ -177,6 +195,8 @@ void game(RenderWindow& window)
 						{
 							// Переменная для выявления, отгадал ли пользователь букву, или нет (в таком случае рисуется часть человечка)
 							int comparate = words_left;
+							happy_animate = false;
+							sad_animate = false;
 
 							index_clicked_letter = i;
 							cout << eng_alphabet[index_clicked_letter] << "\n";
@@ -190,6 +210,11 @@ void game(RenderWindow& window)
 								{
 									right_sprites[index_clicked_letter].setTexture(ts_right[index_clicked_letter]);
 									right_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+									HappyCat.setTexture(tx_cat_happy);
+									HappyCat.setPosition(140, 264);
+									happy_animate = true;
+
+									
 
 									words_left--;
 									hidden_word[a * 2] = eng_alphabet[index_clicked_letter];
@@ -203,6 +228,9 @@ void game(RenderWindow& window)
 							{
 								wrong_sprites[index_clicked_letter].setTexture(ts_wrong[index_clicked_letter]);
 								wrong_sprites[index_clicked_letter].setPosition(positions[i].X, positions[i].Y);
+								SadCat.setTexture(tx_cat_sad);
+								SadCat.setPosition(140, 264);
+								sad_animate = true;
 
 								tries_amount--;
 								text_tries_amount.setString(to_string(tries_amount));
@@ -296,6 +324,7 @@ void game(RenderWindow& window)
 		}
 
 		window.draw(Backgr);
+		window.draw(Cat);
 		// Цикл для отображение картинок букв
 		for (int i = 0; i < letters_count; i++)
 		{
@@ -305,6 +334,15 @@ void game(RenderWindow& window)
 		}
 		window.draw(text_tries_amount);
 		
+		if (happy_animate)
+		{
+			window.draw(HappyCat);
+		}
+		if (sad_animate)
+		{
+			window.draw(SadCat);
+		}
+
 		// изображение плашки/кнопки для победы
 		if (words_left == 0 && tries_amount > 0)
 		{

@@ -9,6 +9,7 @@ using namespace sf;
 bool Menu()
 {
     RenderWindow window(VideoMode(1024, 768), "Lulu Library");
+    Style::Titlebar;
     menu(window);
     return 0;
 }
@@ -19,6 +20,8 @@ bool Menu()
 /// <returns></returns>
 int main()
 {
+    HWND hWnd = GetConsoleWindow();
+    ShowWindow(hWnd, SW_HIDE);
     LoadMainTheme();
     LoadClick();
     Menu();
